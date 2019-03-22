@@ -12,17 +12,18 @@ import java.net.URI
 class MozillaPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        injectAppServicesMavenRepository(project)
+        // Add custom repositories for application-services dependency resolution.
+        // This should be temporary while https://github.com/mozilla/application-services
+        // isn't automatically publishing to maven.mozilla.org yet.
+        // See https://github.com/mozilla/application-services/issues/252.
+        prependMavenRepository(project, "appservices", "https://dl.bintray.com/mozilla-appservices/application-services")
+        // The main repository which eventually will serve everything.
+        prependMavenRepository(project, "mozilla-maven", "https://maven.mozilla.org/maven2")
     }
 
-    private fun injectAppServicesMavenRepository(project: Project) {
+    private fun prependMavenRepository(project: Project, name: String, url: String) {
         with(project) {
-            // Add a custom repository for application-services dependency resolution.
-            // This should be temporary while https://github.com/mozilla/application-services
-            // isn't publishing to maven.mozilla.org yet.
-            // See https://github.com/mozilla/application-services/issues/252.
-            val customName = "appservices"
-            val customURI = URI.create("https://dl.bintray.com/ncalexander/application-services")
+            val customURI = URI.create(url)
 
             // NB: if you change this repository, or add more repositories, please update the repository
             // injection section of the README.me.
@@ -30,14 +31,14 @@ class MozillaPlugin : Plugin<Project> {
             // If there's already a Maven repo with the right URL, or even the right name, roll with it.
             // The name gives the opportunity to customize, if it helps in the wild.
             val existing = project.repositories.find {
-                (it is MavenArtifactRepository) && (it.url == customURI || it.name == customName)
+                (it is MavenArtifactRepository) && (it.url == customURI || it.name == name)
             }
 
             // Otherwise, inject the dependency.
             if (existing == null) {
-                logger.info("Injecting repository for project '${project}': '${customName}' Maven repository with url '${customURI.toASCIIString()}'")
+                logger.info("Injecting repository for project '${project}': '${name}' Maven repository with url '${customURI.toASCIIString()}'")
                 val customMavenRepo = project.repositories.maven {
-                    it.name = customName
+                    it.name = name
                     it.url = customURI
                 }
 

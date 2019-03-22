@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 
+## [0.3] - 2019-03-22
+### Added
+* Injection of our "main" custom maven repository, "mozilla-maven".
+
+### Changed
+* Changed target for the "appservices" repository.
+
 ## [0.2] - 2019-03-18
 ### Added
 * Injection of custom maven repository named "appservices" for consumers of `application-services`.

@@ -14,7 +14,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "org.mozilla.android:gradle-plugin:0.2"
+    classpath "org.mozilla.android:gradle-plugin:0.3"
   }
 }
 ```
@@ -33,7 +33,8 @@ The following tasks can be imported from `org.mozilla.android.tasks` (click the 
 
 ### Repository injection
 Application of this plugin to a project will inject shared Mozilla repositories. Currently injected repositories are:
-- `appservices`: `https://dl.bintray.com/ncalexander/application-services`
+- `mozilla-maven`: `https://maven.mozilla.org/maven2`
+- `appservices`: `https://dl.bintray.com/mozilla-appservices/application-services`
 
 #### Adding a task to your project
 After applying the plugin, you can apply a task, like `ValidateAndroidAppReleaseConfiguration`, by:
